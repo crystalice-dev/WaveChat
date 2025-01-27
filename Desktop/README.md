@@ -1,1 +1,1 @@
-# WaveChat -- Desktop
+# WaveChat - DESKTOP
