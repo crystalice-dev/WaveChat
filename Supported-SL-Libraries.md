@@ -6,4 +6,5 @@
 
 
 ### Spokken Language
-* English
+* English (AMERICAN)
+  
