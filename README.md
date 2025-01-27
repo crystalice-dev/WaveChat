@@ -10,6 +10,7 @@
   * Firebase
   * ReactJS
   * TensorFlow
+  * ###### using: https://github.com/Yannsean22/electron-react-app-template.git
     
 ##### Mobile
   * Firebase
