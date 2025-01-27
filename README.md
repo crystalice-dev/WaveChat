@@ -4,7 +4,7 @@ WaveChat is an open-source communication platform designed to empower the Deaf a
 
 More on: https://crystalicestudio.com/wavechat/
 
-##### Cloud
+##### Cloud:
   * Firebase
   * ReactJS
   * TensorFlow
@@ -15,7 +15,7 @@ More on: https://crystalicestudio.com/wavechat/
   * TensorFlow
   * using: https://github.com/Yannsean22/electron-react-app-template.git
     
-##### Mobile
+##### Mobile:
   * Firebase
   * React Native / Expo
   * TensorFlow
