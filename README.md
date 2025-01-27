@@ -1,18 +1,19 @@
 # WaveChat👋
 * Video chat app that recognizes hand signs
 
-##### Overall containment:
+
+##### Desktop:
   * Firebase
   * ReactJS
-
-### Enviroment Specific:
-##### Desktop:
   * TensorFlow / OpenCV C++
   * ###### using: https://github.com/Yannsean22/electron-react-app-template.git
 
 ##### Cloud
+  * Firebase
+  * ReactJS
   * TensorFlow
     
 ##### Mobile
+  * Firebase
   * React Native / Expo
   * TensorFlow
