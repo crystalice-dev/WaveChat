@@ -5,7 +5,7 @@ WaveChat is an open-source, cross-platform communication platform designed to em
 ##### Desktop:
   * Firebase
   * ReactJS
-  * TensorFlow / OpenCV C++
+  * TensorFlow
   * ###### using: https://github.com/Yannsean22/electron-react-app-template.git
 
 ##### Cloud
