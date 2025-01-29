@@ -8,6 +8,7 @@ More on: https://crystalicestudio.com/wavechat/
 
 ##### Cloud:
   * Firebase
+  * Mediapipe
   * WebRTC
   * ReactJS
   * TensorFlow
@@ -15,6 +16,7 @@ More on: https://crystalicestudio.com/wavechat/
 
 ##### Desktop:
   * Firebase
+  * Mediapipe
   * WebRTC
   * ReactJS
   * TensorFlow
@@ -22,6 +24,7 @@ More on: https://crystalicestudio.com/wavechat/
     
 ##### Mobile:
   * Firebase
+  * Mediapipe
   * WebRTC
   * React Native / Expo
   * TensorFlow
