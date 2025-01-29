@@ -19,6 +19,7 @@ More on: https://crystalicestudio.com/wavechat/
   * Mediapipe
   * WebRTC
   * ReactJS
+  * ElectronJS
   * TensorFlow
   * using: https://github.com/Yannsean22/electron-react-app-template.git
     
