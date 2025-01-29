@@ -8,17 +8,20 @@ More on: https://crystalicestudio.com/wavechat/
 
 ##### Cloud:
   * Firebase
+  * WebRTC
   * ReactJS
   * TensorFlow
     
 
 ##### Desktop:
   * Firebase
+  * WebRTC
   * ReactJS
   * TensorFlow
   * using: https://github.com/Yannsean22/electron-react-app-template.git
     
 ##### Mobile:
   * Firebase
+  * WebRTC
   * React Native / Expo
   * TensorFlow
