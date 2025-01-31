@@ -1,13 +1,19 @@
 import React, {useState} from "react";
 
+import SplashView from "./Views/SplashView";
+import TopBar from "./TopBar";
+
+import { splashStyle } from "../styles/SplashStyle";
 
 const App=()=>{
-    const [name, setName] = useState('name')
+    const handleMaximize = () => {
+        window.electron.maximizeWindow();  // IPC call to toggle maximize
+    };
     return(
-        <div>
-            <h1>{name}</h1>
-            <button onClick={()=>setName('WaveChat')} >click me</button>
-        </div>
+       <div >
+            <TopBar/>
+            <SplashView/>
+       </div>
     )
 }
 

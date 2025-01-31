@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>WaveChat</title>
+    <style>
+        /* Prevent scrolling */
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
 </head>
-<body id="root">
-    
+<body>
+    <div id="root"></div> <!-- React will mount here -->
+    <script src="./build/js/app.js"></script> 
 </body>
-<script src="./build/js/app.js" ></script>
 </html>
