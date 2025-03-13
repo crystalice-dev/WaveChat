@@ -65,6 +65,13 @@ ipcMain.on("window-close", () => {
     win.close();
 });
 
+// Listen for the restart-app event to restart the application
+ipcMain.on("restart-app", () => {
+    // Close the app and restart it using relaunch
+    app.relaunch();  // This relaunches the app
+    app.exit();  // Exit the app after relaunch is triggered
+});
+
 app.whenReady().then(createWindow);
 
 app.on("activate", () => {

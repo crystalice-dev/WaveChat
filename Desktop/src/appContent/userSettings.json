@@ -1,0 +1,46 @@
+{
+    "userId": "67890",
+    "theme": "dark",
+    "language": "English",
+    "signLanguage": "American Sign Language",
+    "translationMode": "sign-to-speech",
+    "autoDetect": true,
+    "voiceSpeed": 1.0,
+    "speechRecognition": {
+      "enabled": true,
+      "language": "en-US"
+    },
+    "feedbackPreferences": {
+      "vibration": true,
+      "sound": true,
+      "visual": true
+    },
+    "cameraSettings": {
+      "gestureSensitivity": 0.8,
+      "autoFocus": true
+    },
+    "notifications": {
+      "newMessages": true,
+      "translationUpdates": false
+    },
+    "privacy": {
+      "storeDataLocally": true,
+      "shareDataWithThirdParties": false
+    },
+    "userProfile": {
+      "name": "Jane Doe",
+      "profilePicture": "https://randomuser.me/api/portraits/women/2.jpg",
+      "email": "janedoe@example.com"
+    },
+    "savedPhrases": [
+      {
+        "signLanguage": "hello",
+        "translatedSpeech": "Hello, how are you?"
+      },
+      {
+        "signLanguage": "thank you",
+        "translatedSpeech": "Thank you very much."
+      }
+    ]
+  }
+  

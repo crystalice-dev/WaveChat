@@ -1,0 +1,63 @@
+[
+    {
+      "contactId": "1",
+      "name": "Alice Smith",
+      "email": "alice.smith@example.com",
+      "phone": "+1-555-0101"
+    },
+    {
+      "contactId": "2",
+      "name": "Bob Johnson",
+      "email": "bob.johnson@example.com",
+      "phone": "+1-555-0102"
+    },
+    {
+      "contactId": "3",
+      "name": "Charlie Brown",
+      "email": "charlie.brown@example.com",
+      "phone": "+1-555-0103"
+    },
+    {
+      "contactId": "4",
+      "name": "David Williams",
+      "email": "david.williams@example.com",
+      "phone": "+1-555-0104"
+    },
+    {
+      "contactId": "5",
+      "name": "Eve Davis",
+      "email": "eve.davis@example.com",
+      "phone": "+1-555-0105"
+    },
+    {
+      "contactId": "6",
+      "name": "Frank Wilson",
+      "email": "frank.wilson@example.com",
+      "phone": "+1-555-0106"
+    },
+    {
+      "contactId": "7",
+      "name": "Grace Lee",
+      "email": "grace.lee@example.com",
+      "phone": "+1-555-0107"
+    },
+    {
+      "contactId": "8",
+      "name": "Hannah Moore",
+      "email": "hannah.moore@example.com",
+      "phone": "+1-555-0108"
+    },
+    {
+      "contactId": "9",
+      "name": "Ian Taylor",
+      "email": "ian.taylor@example.com",
+      "phone": "+1-555-0109"
+    },
+    {
+      "contactId": "10",
+      "name": "Jack Anderson",
+      "email": "jack.anderson@example.com",
+      "phone": "+1-555-0110"
+    }
+  ]
+  
