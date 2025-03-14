@@ -27,7 +27,7 @@ const styles = {
     controls: {
         display: 'flex',
         justifyContent: 'flex-end',
-        padding: '10px',
+        padding: '5px',
         background: 'rgba(0,0,0,0.1)', // Transparent background
     },
     button: {

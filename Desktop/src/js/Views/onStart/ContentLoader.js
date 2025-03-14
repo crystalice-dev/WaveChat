@@ -17,3 +17,8 @@
 import userProfile from "../../../appContent/userProfile.json" // Grabbed from Firebase
 import userSetting from "../../../appContent/userSettings.json"// Grabbed from Firebase
 import userContacts from "../../../appContent/userContacts.json"// Grabbed from Firebase
+
+
+export const setDashBoard=()=>{ 
+    userProfile.name = "Yann Kabambi";
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { splashStyle } from '../../../styles/SplashStyle';
+import { setDashBoard } from './ContentLoader';
 
 function SplashView({ setIsConnected }) {
   const [startTransition, setStartTransition] = useState(false);
@@ -10,6 +11,7 @@ function SplashView({ setIsConnected }) {
   // Check if the device is connected to the internet
   const checkInternetConnection = () => {
     if (navigator.onLine) {
+      setDashBoard();
       setIsConnected(true);
     } else {
       setIsConnected(false);
