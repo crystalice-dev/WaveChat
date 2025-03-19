@@ -9,7 +9,10 @@ const createWindow = () => {
     win = new BrowserWindow({
         width: Math.min(1280, Math.floor(width * 0.8)),
         height: Math.min(900, Math.floor(height * 0.8)),
-        frame: false, // Remove the default window frame (and buttons)
+        minHeight: Math.min(900, Math.floor(height * 0.8)),
+        minWidth: Math.min(1280, Math.floor(width * 0.8)),
+        frame: true, // Remove the default window frame (and buttons)
+        
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
@@ -49,21 +52,6 @@ const createWindow = () => {
 };
 
 // IPC Listeners for custom window actions
-ipcMain.on("window-minimize", () => {
-    win.minimize();
-});
-
-ipcMain.on("window-maximize", () => {
-    if (win.isMaximized()) {
-        win.unmaximize();
-    } else {
-        win.maximize();
-    }
-});
-
-ipcMain.on("window-close", () => {
-    win.close();
-});
 
 // Listen for the restart-app event to restart the application
 ipcMain.on("restart-app", () => {

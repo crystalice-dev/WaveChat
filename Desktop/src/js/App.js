@@ -3,7 +3,6 @@ import { BrowserRouter } from "react-router-dom";
 
 import SplashView from "./Views/onStart/SplashView";
 import NoInternetView from "./Views/onStart/NoInternetView";
-import TopBar from "./TopBar";
 import DashboardView from "./Views/Dashboard/DashboardView";
 //Paths -- Navigation
 import HomePaths from "./Paths/HomePaths";
@@ -22,7 +21,6 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <TopBar />
       {!isSplashFinished ? (
         <SplashView setIsConnected={setIsConnected} />
       ) : (

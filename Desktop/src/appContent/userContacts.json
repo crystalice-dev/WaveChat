@@ -1,63 +1,170 @@
 [
-    {
-      "contactId": "1",
-      "name": "Alice Smith",
-      "email": "alice.smith@example.com",
-      "phone": "+1-555-0101"
-    },
-    {
-      "contactId": "2",
-      "name": "Bob Johnson",
-      "email": "bob.johnson@example.com",
-      "phone": "+1-555-0102"
-    },
-    {
-      "contactId": "3",
-      "name": "Charlie Brown",
-      "email": "charlie.brown@example.com",
-      "phone": "+1-555-0103"
-    },
-    {
-      "contactId": "4",
-      "name": "David Williams",
-      "email": "david.williams@example.com",
-      "phone": "+1-555-0104"
-    },
-    {
-      "contactId": "5",
-      "name": "Eve Davis",
-      "email": "eve.davis@example.com",
-      "phone": "+1-555-0105"
-    },
-    {
-      "contactId": "6",
-      "name": "Frank Wilson",
-      "email": "frank.wilson@example.com",
-      "phone": "+1-555-0106"
-    },
-    {
-      "contactId": "7",
-      "name": "Grace Lee",
-      "email": "grace.lee@example.com",
-      "phone": "+1-555-0107"
-    },
-    {
-      "contactId": "8",
-      "name": "Hannah Moore",
-      "email": "hannah.moore@example.com",
-      "phone": "+1-555-0108"
-    },
-    {
-      "contactId": "9",
-      "name": "Ian Taylor",
-      "email": "ian.taylor@example.com",
-      "phone": "+1-555-0109"
-    },
-    {
-      "contactId": "10",
-      "name": "Jack Anderson",
-      "email": "jack.anderson@example.com",
-      "phone": "+1-555-0110"
-    }
-  ]
-  
+  {
+    "contactId": 0,
+    "name": "CRYSTAL ICE SUPPORT",
+    "hasProfilePicture": false,
+    "profilePicture": "none",
+    "email": "wavechatsupport@crystalicestudio.com",
+    "phone": "+1-555-0101"
+  },
+  {
+    "contactId": 1,
+    "name": "Alec Smith",
+    "hasProfilePicture": false,
+    "profilePicture": "none",
+    "email": "alec.smith@example.com",
+    "phone": "+1-555-0101"
+  },
+  {
+    "contactId": 2,
+    "name": "Jenna Rodriguez",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/women/2.jpg",
+    "email": "jenna.rodriguez@example.com",
+    "phone": "+1-555-0102"
+  },
+  {
+    "contactId": 3,
+    "name": "Marcus Thompson",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/men/3.jpg",
+    "email": "marcus.thompson@example.com",
+    "phone": "+1-555-0103"
+  },
+  {
+    "contactId": 4,
+    "name": "Emily Nguyen",
+    "hasProfilePicture": false,
+    "profilePicture": "none",
+    "email": "emily.nguyen@example.com",
+    "phone": "+1-555-0104"
+  },
+  {
+    "contactId": 6,
+    "name": "Caleb Johnson",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/men/5.jpg",
+    "email": "caleb.johnson@example.com",
+    "phone": "+1-555-0105"
+  },
+  {
+    "contactId": 7,
+    "name": "Sophia Turner",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/women/6.jpg",
+    "email": "sophia.turner@example.com",
+    "phone": "+1-555-0106"
+  },
+  {
+    "contactId": 7,
+    "name": "Ethan Hall",
+    "hasProfilePicture": false,
+    "profilePicture": "none",
+    "email": "ethan.hall@example.com",
+    "phone": "+1-555-0107"
+  },
+  {
+    "contactId": 8,
+    "name": "Maya Perez",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/women/8.jpg",
+    "email": "maya.perez@example.com",
+    "phone": "+1-555-0108"
+  },
+  {
+    "contactId": 9,
+    "name": "Liam Brown",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/men/9.jpg",
+    "email": "liam.brown@example.com",
+    "phone": "+1-555-0109"
+  },
+  {
+    "contactId": 10,
+    "name": "Chloe Davis",
+    "hasProfilePicture": false,
+    "profilePicture": "none",
+    "email": "chloe.davis@example.com",
+    "phone": "+1-555-0110"
+  },
+  {
+    "contactId": 11,
+    "name": "Noah Wright",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/men/11.jpg",
+    "email": "noah.wright@example.com",
+    "phone": "+1-555-0111"
+  },
+  {
+    "contactId": 12,
+    "name": "Lily Walker",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/women/12.jpg",
+    "email": "lily.walker@example.com",
+    "phone": "+1-555-0112"
+  },
+  {
+    "contactId": 13,
+    "name": "Jackson Lee",
+    "hasProfilePicture": false,
+    "profilePicture": "none",
+    "email": "jackson.lee@example.com",
+    "phone": "+1-555-0113"
+  },
+  {
+    "contactId": 14,
+    "name": "Grace Allen",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/women/14.jpg",
+    "email": "grace.allen@example.com",
+    "phone": "+1-555-0114"
+  },
+  {
+    "contactId": 15,
+    "name": "Logan Evans",
+    "hasProfilePicture": false,
+    "profilePicture": "none",
+    "email": "logan.evans@example.com",
+    "phone": "+1-555-0115"
+  },
+  {
+    "contactId": 16,
+    "name": "Natalie Moore",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/women/16.jpg",
+    "email": "natalie.moore@example.com",
+    "phone": "+1-555-0116"
+  },
+  {
+    "contactId": 17,
+    "name": "Hunter Scott",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/men/17.jpg",
+    "email": "hunter.scott@example.com",
+    "phone": "+1-555-0117"
+  },
+  {
+    "contactId": 18,
+    "name": "Zoe Hill",
+    "hasProfilePicture": false,
+    "profilePicture": "none",
+    "email": "zoe.hill@example.com",
+    "phone": "+1-555-0118"
+  },
+  {
+    "contactId": 19,
+    "name": "Isaac Adams",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/men/19.jpg",
+    "email": "isaac.adams@example.com",
+    "phone": "+1-555-0119"
+  },
+  {
+    "contactId": 20,
+    "name": "Victoria Clark",
+    "hasProfilePicture": true,
+    "profilePicture": "https://randomuser.me/api/portraits/women/20.jpg",
+    "email": "victoria.clark@example.com",
+    "phone": "+1-555-0120"
+  }
+]
