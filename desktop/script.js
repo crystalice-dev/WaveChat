@@ -1,26 +1,30 @@
-/* ================================
-   WaveChat – script.js
-   PeerJS-based P2P video session
-   ================================ */
-
-/* ---------- DOM ELEMENTS ---------- */
 const entryModal = document.getElementById("entry-modal");
 const roomInput = document.getElementById("room-input");
 const notification = document.getElementById("notification");
 
 const localVideo = document.getElementById("local-video");
 const remoteVideo = document.getElementById("remote-video");
-
-const roomChipValue = document.getElementById("room-chip-value");
 const statusText = document.querySelector(".status-text");
 
-/* ---------- GLOBAL STATE ---------- */
+const chatPanel = document.getElementById("chat-panel");
+const settingsPanel = document.getElementById("settings-panel");
+const cvToggle = document.getElementById("cv-toggle");
+const cvMirror = document.getElementById("cv-mirror");
+
+const localOverlay = document.getElementById("local-overlay");
+const localCtx = localOverlay.getContext("2d");
+
 let peer = null;
 let localStream = null;
 let currentCall = null;
-let currentRoomId = null;
 
-/* ---------- MEDIA ---------- */
+/* -------------------- MediaPipe State -------------------- */
+let hands = null;
+let faceMesh = null;
+let cvReady = false;
+let cvLoopRunning = false;
+
+/* -------------------- Media -------------------- */
 async function getLocalStream() {
   if (localStream) return localStream;
 
@@ -30,155 +34,276 @@ async function getLocalStream() {
   });
 
   localVideo.srcObject = localStream;
-  localVideo.muted = true;
   await localVideo.play();
+
+  // Start CV pipeline once camera is live
+  await initMediapipe();
+  startCvLoop();
 
   return localStream;
 }
 
-/* ---------- UI HELPERS ---------- */
-function showNotification(msg, timeout = 3000) {
+/* -------------------- UI -------------------- */
+function notify(msg, time = 2500) {
   notification.textContent = msg;
   notification.hidden = false;
-
-  if (timeout) {
-    setTimeout(() => {
-      notification.hidden = true;
-    }, timeout);
-  }
+  setTimeout(() => (notification.hidden = true), time);
 }
 
-function hideEntryModal() {
+function hideModal() {
   entryModal.style.display = "none";
 }
 
 function setStatus(text) {
-  if (statusText) statusText.textContent = text;
+  statusText.textContent = text;
 }
 
-function setRoomChip(roomId) {
-  if (roomChipValue) roomChipValue.textContent = roomId;
-}
+/* -------------------- Peer -------------------- */
+function initPeer(id) {
+  peer = new Peer(id);
 
-/* ---------- PEER SETUP ---------- */
-function createPeer(roomId) {
-  peer = new Peer(roomId);
+  peer.on("open", () => setStatus("Connected"));
 
-  peer.on("open", id => {
-    console.log("[Peer] Opened with ID:", id);
-    setStatus("Connected");
-    setRoomChip(id);
-  });
-
-  peer.on("call", async call => {
-    console.log("[Peer] Incoming call");
-
+  peer.on("call", async (call) => {
     const stream = await getLocalStream();
     call.answer(stream);
-    handleCall(call);
+    attachCall(call);
   });
 
-  peer.on("error", err => {
-    console.error("[Peer] Error:", err);
-    showNotification("Peer error: " + err.type);
+  peer.on("error", (err) => {
+    console.error("[Peer] error:", err);
+    notify("Peer error: " + (err?.type || "unknown"));
   });
 }
 
-/* ---------- CALL HANDLING ---------- */
-function handleCall(call) {
-  if (currentCall) {
-    currentCall.close();
-  }
-
+/* -------------------- Call -------------------- */
+function attachCall(call) {
   currentCall = call;
 
-  call.on("stream", remoteStream => {
-    console.log("[Call] Receiving remote stream");
-    remoteVideo.srcObject = remoteStream;
+  call.on("stream", (stream) => {
+    remoteVideo.srcObject = stream;
     remoteVideo.play();
   });
 
   call.on("close", () => {
-    console.log("[Call] Call closed");
     remoteVideo.srcObject = null;
     setStatus("Disconnected");
   });
 }
 
-/* ---------- ROOM ACTIONS ---------- */
+/* -------------------- Room -------------------- */
 async function createRoom() {
-  const roomId = roomInput.value.trim() || generateRoomId();
-  startSession(roomId, true);
+  const roomId = roomInput.value || "wave-" + Math.random().toString(36).slice(2, 8);
+  hideModal();
+  await getLocalStream();
+  initPeer(roomId);
+  notify("Room created: " + roomId);
 }
 
 async function joinRoom() {
   const roomId = roomInput.value.trim();
-  if (!roomId) {
-    showNotification("Please enter a Room ID");
-    return;
-  }
-  startSession(roomId, false);
-}
+  if (!roomId) return notify("Enter a Room ID");
 
-async function startSession(roomId, isCreator) {
-  currentRoomId = roomId;
-  hideEntryModal();
-  showNotification("Joining room: " + roomId, 2000);
-  setStatus("Connecting…");
-
+  hideModal();
   await getLocalStream();
-  createPeer(isCreator ? roomId : undefined);
+  initPeer();
 
-  if (!isCreator) {
-    peer.on("open", async id => {
-      console.log("[Peer] Calling room:", roomId);
-      const call = peer.call(roomId, localStream);
-      handleCall(call);
-    });
-  }
+  peer.on("open", () => {
+    const call = peer.call(roomId, localStream);
+    attachCall(call);
+  });
 }
 
-/* ---------- SCREEN SHARE ---------- */
+/* -------------------- Screen Share -------------------- */
 async function startScreenShare() {
-  if (!currentCall) {
-    showNotification("No active call to share screen");
-    return;
-  }
+  if (!currentCall) return notify("No active call");
 
+  const displayStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+  const screenTrack = displayStream.getVideoTracks()[0];
+
+  const sender = currentCall.peerConnection
+    .getSenders()
+    .find((s) => s.track && s.track.kind === "video");
+
+  if (!sender) return notify("No video sender found");
+
+  sender.replaceTrack(screenTrack);
+  notify("Screen sharing");
+
+  screenTrack.onended = () => {
+    const camTrack = localStream.getVideoTracks()[0];
+    sender.replaceTrack(camTrack);
+    notify("Camera restored");
+  };
+}
+
+/* -------------------- Toggles -------------------- */
+function toggleMic() {
+  if (!localStream) return;
+  const t = localStream.getAudioTracks()[0];
+  if (!t) return notify("No mic track");
+  t.enabled = !t.enabled;
+  notify(t.enabled ? "Mic on" : "Mic muted");
+}
+
+function toggleCamera() {
+  if (!localStream) return;
+  const t = localStream.getVideoTracks()[0];
+  if (!t) return notify("No camera track");
+  t.enabled = !t.enabled;
+  notify(t.enabled ? "Camera on" : "Camera off");
+}
+
+/* -------------------- Panels -------------------- */
+function toggleChat() {
+  chatPanel.classList.toggle("open");
+}
+
+function toggleSettings() {
+  settingsPanel.classList.toggle("open");
+}
+
+/* -------------------- Leave -------------------- */
+function leaveCall() {
   try {
-    const screenStream = await navigator.mediaDevices.getDisplayMedia({
-      video: true
-    });
+    if (currentCall) currentCall.close();
+    if (peer) peer.destroy();
+  } catch {}
+  location.reload();
+}
 
-    const screenTrack = screenStream.getVideoTracks()[0];
-    const sender = currentCall.peerConnection
-      .getSenders()
-      .find(s => s.track.kind === "video");
+/* =========================================================
+   MediaPipe Pipeline (Hands + FaceMesh)
+   ========================================================= */
 
-    if (sender) {
-      sender.replaceTrack(screenTrack);
-      showNotification("Screen sharing started");
+async function initMediapipe() {
+  if (cvReady) return;
+
+  // Hands
+  hands = new Hands({
+    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+  });
+
+  hands.setOptions({
+    maxNumHands: 2,
+    modelComplexity: 1,
+    minDetectionConfidence: 0.6,
+    minTrackingConfidence: 0.6
+  });
+
+  hands.onResults(onHandsResults);
+
+  // FaceMesh
+  faceMesh = new FaceMesh({
+    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+  });
+
+  faceMesh.setOptions({
+    maxNumFaces: 1,
+    refineLandmarks: true,
+    minDetectionConfidence: 0.6,
+    minTrackingConfidence: 0.6
+  });
+
+  faceMesh.onResults(onFaceResults);
+
+  cvReady = true;
+  notify("CV pipeline ready");
+}
+
+/* Draw buffers so we can combine hand + face output cleanly */
+let lastHands = null;
+let lastFace = null;
+
+function onHandsResults(results) {
+  lastHands = results;
+}
+
+function onFaceResults(results) {
+  lastFace = results;
+}
+
+/* Keep canvas sized to the displayed local video */
+function resizeOverlayToVideo() {
+  const w = localVideo.videoWidth || 0;
+  const h = localVideo.videoHeight || 0;
+  if (!w || !h) return;
+
+  if (localOverlay.width !== w) localOverlay.width = w;
+  if (localOverlay.height !== h) localOverlay.height = h;
+}
+
+async function startCvLoop() {
+  if (cvLoopRunning) return;
+  cvLoopRunning = true;
+
+  const loop = async () => {
+    // Pause CV if disabled or video not ready
+    if (!cvToggle?.checked) {
+      clearOverlay();
+      requestAnimationFrame(loop);
+      return;
     }
 
-    screenTrack.onended = async () => {
-      const camTrack = localStream.getVideoTracks()[0];
-      sender.replaceTrack(camTrack);
-      showNotification("Screen sharing stopped");
-    };
+    if (!cvReady || localVideo.readyState < 2) {
+      requestAnimationFrame(loop);
+      return;
+    }
 
-  } catch (err) {
-    console.error("[ScreenShare] Error:", err);
-    showNotification("Screen share failed");
+    resizeOverlayToVideo();
+
+    // Feed frames into MediaPipe (sequential to avoid GPU overload)
+    try {
+      await hands.send({ image: localVideo });
+      await faceMesh.send({ image: localVideo });
+      drawCombined();
+    } catch (e) {
+      // If this throws occasionally on startup, it's fine—just keep looping.
+      // Uncomment to debug:
+      // console.error("CV loop error:", e);
+    }
+
+    requestAnimationFrame(loop);
+  };
+
+  requestAnimationFrame(loop);
+}
+
+function clearOverlay() {
+  if (!localOverlay.width || !localOverlay.height) return;
+  localCtx.clearRect(0, 0, localOverlay.width, localOverlay.height);
+}
+
+function drawCombined() {
+  if (!localOverlay.width || !localOverlay.height) return;
+
+  clearOverlay();
+
+  // Mirror overlay (selfie view) if enabled
+  const mirror = !!cvMirror?.checked;
+
+  localCtx.save();
+  if (mirror) {
+    localCtx.translate(localOverlay.width, 0);
+    localCtx.scale(-1, 1);
   }
-}
 
-/* ---------- UTIL ---------- */
-function generateRoomId() {
-  return "wave-" + Math.random().toString(36).substring(2, 8);
-}
+  // Face landmarks
+  if (lastFace && lastFace.multiFaceLandmarks) {
+    for (const landmarks of lastFace.multiFaceLandmarks) {
+      // A lightweight subset: tesselation is heavy; contours are usually enough.
+      drawConnectors(localCtx, landmarks, FACEMESH_CONTOURS, { lineWidth: 1 });
+      drawLandmarks(localCtx, landmarks, { radius: 1 });
+    }
+  }
 
-/* ---------- DEBUG ---------- */
-window._wavechat = {
-  get peer() { return peer; },
-  get call() { return currentCall; }
-};
+  // Hand landmarks
+  if (lastHands && lastHands.multiHandLandmarks) {
+    for (const landmarks of lastHands.multiHandLandmarks) {
+      drawConnectors(localCtx, landmarks, HAND_CONNECTIONS, { lineWidth: 2 });
+      drawLandmarks(localCtx, landmarks, { radius: 3 });
+    }
+  }
+
+  localCtx.restore();
+}
