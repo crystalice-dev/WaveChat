@@ -35,6 +35,9 @@
       <button class="btn btn-primary" onclick="createRoom()">Create</button>
       <button class="btn btn-secondary" onclick="joinRoom()">Join</button>
     </div>
+    <div class="small-muted" style="margin-top:10px;">
+      Tip: Share the same Room ID with the other peer.
+    </div>
   </div>
 </div>
 
@@ -51,10 +54,7 @@
     <div class="pip">
       <div class="video-card">
         <video id="local-video" autoplay muted playsinline></video>
-
-        <!-- 👇 Overlay canvas for landmarks (local) -->
         <canvas id="local-overlay" class="overlay"></canvas>
-
         <span class="pill top-left">You</span>
       </div>
     </div>
@@ -62,41 +62,83 @@
 
   <!-- Controls -->
   <footer class="controls">
-    <button class="btn btn-ghost" onclick="toggleMic()">🎤</button>
-    <button class="btn btn-ghost" onclick="toggleCamera()">🎥</button>
-    <button class="btn btn-ghost" onclick="startScreenShare()">🖥️</button>
-    <button class="btn btn-ghost" onclick="toggleChat()">💬</button>
-    <button class="btn btn-ghost" onclick="toggleSettings()">⚙️</button>
-    <button class="btn btn-danger" onclick="leaveCall()">⛔</button>
+    <button id="btn-mic" class="btn btn-ghost" onclick="toggleMic()" title="Mic">🎤</button>
+    <button id="btn-cam" class="btn btn-ghost" onclick="toggleCamera()" title="Camera">🎥</button>
+
+    <button class="btn btn-ghost" onclick="setDrawer(1)" title="Share Screen">🖥️</button>
+    <button class="btn btn-ghost" onclick="setDrawer(2)" title="Chat">💬</button>
+    <button class="btn btn-ghost" onclick="setDrawer(3)" title="Settings">⚙️</button>
+
+    <button class="btn btn-danger" onclick="setDrawer(4)" title="Leave">⛔</button>
   </footer>
 </main>
 
-<!-- Side Panels -->
-<div id="chat-panel" class="side-panel">
-  <h3>Chat</h3>
-  <div class="panel-body">(chat coming soon)</div>
-</div>
-
-<div id="settings-panel" class="side-panel">
-  <h3>Settings</h3>
-  <div class="panel-body">
-    <div class="setting-row">
-      <label>
-        <input type="checkbox" id="cv-toggle" checked />
-        Enable hand/face tracking
-      </label>
-    </div>
-    <div class="setting-row">
-      <label>
-        <input type="checkbox" id="cv-mirror" checked />
-        Mirror overlay (selfie view)
-      </label>
-    </div>
-    <div class="setting-row small-muted">
-      Tracking runs locally on your device.
-    </div>
+<!-- Single Drawer (replaces multiple side panels) -->
+<aside id="drawer" class="drawer" aria-hidden="true">
+  <div class="drawer-header">
+    <div class="drawer-title" id="drawer-title">Drawer</div>
+    <button class="drawer-close" onclick="setDrawer(0)" title="Close">✕</button>
   </div>
-</div>
+
+  <div class="drawer-body">
+
+    <!-- View 1: Share Screen -->
+    <section class="drawer-view" id="drawer-view-1">
+      <div class="drawer-section-title">Share</div>
+      <div class="drawer-card">
+        <p class="drawer-text">Share your screen with the other peer.</p>
+        <button class="btn btn-primary drawer-wide" onclick="startScreenShare()">Start Screen Share</button>
+      </div>
+      <div class="drawer-hint">Tip: Stop sharing from the browser/screen prompt.</div>
+    </section>
+
+    <!-- View 2: Chat -->
+    <section class="drawer-view" id="drawer-view-2">
+      <div class="drawer-section-title">Chat</div>
+
+      <div id="chat-log" class="chat-log"></div>
+
+      <div class="chat-compose">
+        <input id="chat-input" class="chat-input" placeholder="Type a message..." />
+        <button class="btn btn-primary" onclick="sendChat()">Send</button>
+      </div>
+
+      <div class="drawer-hint">Note: messages are local-only for now (next step: data channel).</div>
+    </section>
+
+    <!-- View 3: Settings -->
+    <section class="drawer-view" id="drawer-view-3">
+      <div class="drawer-section-title">Settings</div>
+
+      <div class="drawer-card">
+        <label class="check-row">
+          <input type="checkbox" id="cv-toggle" checked />
+          Enable hand/face tracking
+        </label>
+
+        <label class="check-row">
+          <input type="checkbox" id="cv-mirror" checked />
+          Mirror overlay (selfie view)
+        </label>
+
+        <div class="drawer-hint">Tracking runs locally on your device.</div>
+      </div>
+    </section>
+
+    <!-- View 4: Leave confirm -->
+    <section class="drawer-view" id="drawer-view-4">
+      <div class="drawer-section-title">Leave session?</div>
+      <div class="drawer-card">
+        <p class="drawer-text">Are you sure you want to leave?</p>
+        <div class="drawer-actions">
+          <button class="btn btn-danger" onclick="confirmLeave(true)">Yes, leave</button>
+          <button class="btn btn-ghost" onclick="confirmLeave(false)">No</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</aside>
 
 <!-- WebRTC/PeerJS -->
 <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
@@ -106,7 +148,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
 
-<!-- The app -->
 <script src="script.js"></script>
 
 </body>
