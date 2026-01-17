@@ -1,128 +1,184 @@
-const PRE = "DELTA"
-const SUF = "MEET"
-var room_id;
-var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-var local_stream;
-var screenStream;
-var peer = null;
-var currentPeer = null
-var screenSharing = false
-function createRoom() {
-    console.log("Creating Room")
-    let room = document.getElementById("room-input").value;
-    if (room == " " || room == "") {
-        alert("Please enter room number")
-        return;
-    }
-    room_id = PRE + room + SUF;
-    peer = new Peer(room_id)
-    peer.on('open', (id) => {
-        console.log("Peer Connected with ID: ", id)
-        hideModal()
-        getUserMedia({ video: true, audio: true }, (stream) => {
-            local_stream = stream;
-            setLocalStream(local_stream)
-        }, (err) => {
-            console.log(err)
-        })
-        notify("Waiting for peer to join.")
-    })
-    peer.on('call', (call) => {
-        call.answer(local_stream);
-        call.on('stream', (stream) => {
-            setRemoteStream(stream)
-        })
-        currentPeer = call;
-    })
+/* ================================
+   WaveChat – script.js
+   PeerJS-based P2P video session
+   ================================ */
+
+/* ---------- DOM ELEMENTS ---------- */
+const entryModal = document.getElementById("entry-modal");
+const roomInput = document.getElementById("room-input");
+const notification = document.getElementById("notification");
+
+const localVideo = document.getElementById("local-video");
+const remoteVideo = document.getElementById("remote-video");
+
+const roomChipValue = document.getElementById("room-chip-value");
+const statusText = document.querySelector(".status-text");
+
+/* ---------- GLOBAL STATE ---------- */
+let peer = null;
+let localStream = null;
+let currentCall = null;
+let currentRoomId = null;
+
+/* ---------- MEDIA ---------- */
+async function getLocalStream() {
+  if (localStream) return localStream;
+
+  localStream = await navigator.mediaDevices.getUserMedia({
+    video: true,
+    audio: true
+  });
+
+  localVideo.srcObject = localStream;
+  localVideo.muted = true;
+  await localVideo.play();
+
+  return localStream;
 }
 
-function setLocalStream(stream) {
+/* ---------- UI HELPERS ---------- */
+function showNotification(msg, timeout = 3000) {
+  notification.textContent = msg;
+  notification.hidden = false;
 
-    let video = document.getElementById("local-video");
-    video.srcObject = stream;
-    video.muted = true;
-    video.play();
-}
-function setRemoteStream(stream) {
-
-    let video = document.getElementById("remote-video");
-    video.srcObject = stream;
-    video.play();
-}
-
-function hideModal() {
-    document.getElementById("entry-modal").hidden = true
-}
-
-function notify(msg) {
-    let notification = document.getElementById("notification")
-    notification.innerHTML = msg
-    notification.hidden = false
+  if (timeout) {
     setTimeout(() => {
-        notification.hidden = true;
-    }, 3000)
+      notification.hidden = true;
+    }, timeout);
+  }
 }
 
-function joinRoom() {
-    console.log("Joining Room")
-    let room = document.getElementById("room-input").value;
-    if (room == " " || room == "") {
-        alert("Please enter room number")
-        return;
-    }
-    room_id = PRE + room + SUF;
-    hideModal()
-    peer = new Peer()
-    peer.on('open', (id) => {
-        console.log("Connected with Id: " + id)
-        getUserMedia({ video: true, audio: true }, (stream) => {
-            local_stream = stream;
-            setLocalStream(local_stream)
-            notify("Joining peer")
-            let call = peer.call(room_id, stream)
-            call.on('stream', (stream) => {
-                setRemoteStream(stream);
-            })
-            currentPeer = call;
-        }, (err) => {
-            console.log(err)
-        })
-
-    })
+function hideEntryModal() {
+  entryModal.style.display = "none";
 }
 
-function startScreenShare() {
-    if (screenSharing) {
-        stopScreenSharing()
-    }
-    navigator.mediaDevices.getDisplayMedia({ video: true }).then((stream) => {
-        screenStream = stream;
-        let videoTrack = screenStream.getVideoTracks()[0];
-        videoTrack.onended = () => {
-            stopScreenSharing()
-        }
-        if (peer) {
-            let sender = currentPeer.peerConnection.getSenders().find(function (s) {
-                return s.track.kind == videoTrack.kind;
-            })
-            sender.replaceTrack(videoTrack)
-            screenSharing = true
-        }
-        console.log(screenStream)
-    })
+function setStatus(text) {
+  if (statusText) statusText.textContent = text;
 }
 
-function stopScreenSharing() {
-    if (!screenSharing) return;
-    let videoTrack = local_stream.getVideoTracks()[0];
-    if (peer) {
-        let sender = currentPeer.peerConnection.getSenders().find(function (s) {
-            return s.track.kind == videoTrack.kind;
-        })
-        sender.replaceTrack(videoTrack)
-    }
-    screenStream.getTracks().forEach(function (track) {
-        track.stop();
+function setRoomChip(roomId) {
+  if (roomChipValue) roomChipValue.textContent = roomId;
+}
+
+/* ---------- PEER SETUP ---------- */
+function createPeer(roomId) {
+  peer = new Peer(roomId);
+
+  peer.on("open", id => {
+    console.log("[Peer] Opened with ID:", id);
+    setStatus("Connected");
+    setRoomChip(id);
+  });
+
+  peer.on("call", async call => {
+    console.log("[Peer] Incoming call");
+
+    const stream = await getLocalStream();
+    call.answer(stream);
+    handleCall(call);
+  });
+
+  peer.on("error", err => {
+    console.error("[Peer] Error:", err);
+    showNotification("Peer error: " + err.type);
+  });
+}
+
+/* ---------- CALL HANDLING ---------- */
+function handleCall(call) {
+  if (currentCall) {
+    currentCall.close();
+  }
+
+  currentCall = call;
+
+  call.on("stream", remoteStream => {
+    console.log("[Call] Receiving remote stream");
+    remoteVideo.srcObject = remoteStream;
+    remoteVideo.play();
+  });
+
+  call.on("close", () => {
+    console.log("[Call] Call closed");
+    remoteVideo.srcObject = null;
+    setStatus("Disconnected");
+  });
+}
+
+/* ---------- ROOM ACTIONS ---------- */
+async function createRoom() {
+  const roomId = roomInput.value.trim() || generateRoomId();
+  startSession(roomId, true);
+}
+
+async function joinRoom() {
+  const roomId = roomInput.value.trim();
+  if (!roomId) {
+    showNotification("Please enter a Room ID");
+    return;
+  }
+  startSession(roomId, false);
+}
+
+async function startSession(roomId, isCreator) {
+  currentRoomId = roomId;
+  hideEntryModal();
+  showNotification("Joining room: " + roomId, 2000);
+  setStatus("Connecting…");
+
+  await getLocalStream();
+  createPeer(isCreator ? roomId : undefined);
+
+  if (!isCreator) {
+    peer.on("open", async id => {
+      console.log("[Peer] Calling room:", roomId);
+      const call = peer.call(roomId, localStream);
+      handleCall(call);
     });
-    screenSharing = false
+  }
 }
+
+/* ---------- SCREEN SHARE ---------- */
+async function startScreenShare() {
+  if (!currentCall) {
+    showNotification("No active call to share screen");
+    return;
+  }
+
+  try {
+    const screenStream = await navigator.mediaDevices.getDisplayMedia({
+      video: true
+    });
+
+    const screenTrack = screenStream.getVideoTracks()[0];
+    const sender = currentCall.peerConnection
+      .getSenders()
+      .find(s => s.track.kind === "video");
+
+    if (sender) {
+      sender.replaceTrack(screenTrack);
+      showNotification("Screen sharing started");
+    }
+
+    screenTrack.onended = async () => {
+      const camTrack = localStream.getVideoTracks()[0];
+      sender.replaceTrack(camTrack);
+      showNotification("Screen sharing stopped");
+    };
+
+  } catch (err) {
+    console.error("[ScreenShare] Error:", err);
+    showNotification("Screen share failed");
+  }
+}
+
+/* ---------- UTIL ---------- */
+function generateRoomId() {
+  return "wave-" + Math.random().toString(36).substring(2, 8);
+}
+
+/* ---------- DEBUG ---------- */
+window._wavechat = {
+  get peer() { return peer; },
+  get call() { return currentCall; }
+};
