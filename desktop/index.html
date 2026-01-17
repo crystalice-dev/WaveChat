@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,98 +8,106 @@
 </head>
 
 <body>
-  <!-- Top Bar -->
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo-dot"></div>
-      <div class="brand-text">
-        <div class="brand-name">WaveChat</div>
-        <div class="brand-sub">P2P Video Session</div>
-      </div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo-dot"></div>
+    <div>
+      <div class="brand-name">WaveChat</div>
+      <div class="brand-sub">Peer-to-Peer Video</div>
+    </div>
+  </div>
+
+  <span class="status-pill">
+    <span class="status-dot"></span>
+    <span class="status-text">Ready</span>
+  </span>
+</header>
+
+<p id="notification" class="notification" hidden></p>
+
+<!-- Entry Modal -->
+<div class="modal-backdrop" id="entry-modal">
+  <div class="modal">
+    <h2>Join a Room</h2>
+    <input id="room-input" class="room-input" placeholder="Room ID" />
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="createRoom()">Create</button>
+      <button class="btn btn-secondary" onclick="joinRoom()">Join</button>
+    </div>
+  </div>
+</div>
+
+<!-- Main -->
+<main class="meet">
+  <div class="stage">
+    <!-- Remote -->
+    <div class="video-card video-remote">
+      <video id="remote-video" autoplay playsinline></video>
+      <span class="pill top-left">Remote</span>
     </div>
 
-    <div class="topbar-actions">
-      <span class="status-pill" id="status-pill">
-        <span class="status-dot"></span>
-        <span class="status-text">Ready</span>
-      </span>
-    </div>
-  </header>
+    <!-- Local PIP -->
+    <div class="pip">
+      <div class="video-card">
+        <video id="local-video" autoplay muted playsinline></video>
 
-  <!-- Notification Bar -->
-  <p id="notification" class="notification" hidden></p>
+        <!-- 👇 Overlay canvas for landmarks (local) -->
+        <canvas id="local-overlay" class="overlay"></canvas>
 
-  <!-- Join/Create Modal -->
-  <div class="modal-backdrop" id="entry-modal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2>Start a session</h2>
-        <p>Create a room or join an existing one.</p>
-      </div>
-
-      <div class="field">
-        <label for="room-input">Room ID</label>
-        <input id="room-input" class="room-input" placeholder="e.g. wave-1234" autocomplete="off" />
-        <div class="hint">Tip: share the same Room ID with the other peer.</div>
-      </div>
-
-      <div class="modal-actions">
-        <button class="btn btn-primary" onclick="createRoom()">Create Room</button>
-        <button class="btn btn-secondary" onclick="joinRoom()">Join Room</button>
-      </div>
-
-      <div class="modal-footer">
-        <span class="small-muted">WaveChat uses peer-to-peer media when possible.</span>
+        <span class="pill top-left">You</span>
       </div>
     </div>
   </div>
 
-  <!-- Main Meet Area -->
-  <main class="meet">
-    <section class="stage">
-      <!-- Remote Video (main) -->
-      <div class="video-card video-remote">
-        <video id="remote-video" autoplay playsinline></video>
-        <div class="video-label">
-          <span class="pill">Remote</span>
-        </div>
-      </div>
+  <!-- Controls -->
+  <footer class="controls">
+    <button class="btn btn-ghost" onclick="toggleMic()">🎤</button>
+    <button class="btn btn-ghost" onclick="toggleCamera()">🎥</button>
+    <button class="btn btn-ghost" onclick="startScreenShare()">🖥️</button>
+    <button class="btn btn-ghost" onclick="toggleChat()">💬</button>
+    <button class="btn btn-ghost" onclick="toggleSettings()">⚙️</button>
+    <button class="btn btn-danger" onclick="leaveCall()">⛔</button>
+  </footer>
+</main>
 
-      <!-- Local Video (picture-in-picture) -->
-      <div class="pip">
-        <div class="video-card video-local">
-          <video id="local-video" autoplay muted playsinline></video>
-          <div class="video-label">
-            <span class="pill">You</span>
-          </div>
-        </div>
-      </div>
-    </section>
+<!-- Side Panels -->
+<div id="chat-panel" class="side-panel">
+  <h3>Chat</h3>
+  <div class="panel-body">(chat coming soon)</div>
+</div>
 
-    <!-- Bottom Controls -->
-    <footer class="controls">
-      <div class="controls-left">
-        <div class="room-chip" title="Room info appears after you connect (optional to wire in JS)">
-          <span class="room-chip-label">Room</span>
-          <span class="room-chip-value" id="room-chip-value">—</span>
-        </div>
-      </div>
+<div id="settings-panel" class="side-panel">
+  <h3>Settings</h3>
+  <div class="panel-body">
+    <div class="setting-row">
+      <label>
+        <input type="checkbox" id="cv-toggle" checked />
+        Enable hand/face tracking
+      </label>
+    </div>
+    <div class="setting-row">
+      <label>
+        <input type="checkbox" id="cv-mirror" checked />
+        Mirror overlay (selfie view)
+      </label>
+    </div>
+    <div class="setting-row small-muted">
+      Tracking runs locally on your device.
+    </div>
+  </div>
+</div>
 
-      <div class="controls-center">
-        <button class="btn btn-ghost" onclick="startScreenShare()">
-          <span class="icon">🖥️</span>
-          Screen Share
-        </button>
-      </div>
+<!-- WebRTC/PeerJS -->
+<script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
 
-      <div class="controls-right">
-        <div class="small-muted">WaveChat</div>
-      </div>
-    </footer>
-  </main>
+<!-- MediaPipe (no import/require) -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
 
-  <!-- PeerJS + your script -->
-  <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
-  <script src="script.js"></script>
+<!-- The app -->
+<script src="script.js"></script>
+
 </body>
 </html>
