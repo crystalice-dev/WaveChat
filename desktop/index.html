@@ -1,34 +1,106 @@
-<html>
-
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Delta Meet</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WaveChat</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-    <h1 class="title">Delta Meet</h1>
-    <p id="notification" hidden></p>
-    <div class="entry-modal" id="entry-modal">
-        <p>Create or Join Meeting</p>
-        <input id="room-input" class="room-input" placeholder="Enter Room ID">
-        <div>
-            <button onclick="createRoom()">Create Room</button>
-            <button onclick="joinRoom()">Join Room</button>
-        </div>
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo-dot"></div>
+      <div class="brand-text">
+        <div class="brand-name">WaveChat</div>
+        <div class="brand-sub">P2P Video Session</div>
+      </div>
     </div>
-    <div class="meet-area">
-        <!-- Remote Video Element-->
-        <video id="remote-video"></video>
 
-        <!-- Local Video Element-->
-        <video id="local-video"></video>
-        <div class="meet-controls-bar">
-            <button onclick="startScreenShare()">Screen Share</button>
-        </div>
+    <div class="topbar-actions">
+      <span class="status-pill" id="status-pill">
+        <span class="status-dot"></span>
+        <span class="status-text">Ready</span>
+      </span>
     </div>
+  </header>
+
+  <!-- Notification Bar -->
+  <p id="notification" class="notification" hidden></p>
+
+  <!-- Join/Create Modal -->
+  <div class="modal-backdrop" id="entry-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Start a session</h2>
+        <p>Create a room or join an existing one.</p>
+      </div>
+
+      <div class="field">
+        <label for="room-input">Room ID</label>
+        <input id="room-input" class="room-input" placeholder="e.g. wave-1234" autocomplete="off" />
+        <div class="hint">Tip: share the same Room ID with the other peer.</div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="createRoom()">Create Room</button>
+        <button class="btn btn-secondary" onclick="joinRoom()">Join Room</button>
+      </div>
+
+      <div class="modal-footer">
+        <span class="small-muted">WaveChat uses peer-to-peer media when possible.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Meet Area -->
+  <main class="meet">
+    <section class="stage">
+      <!-- Remote Video (main) -->
+      <div class="video-card video-remote">
+        <video id="remote-video" autoplay playsinline></video>
+        <div class="video-label">
+          <span class="pill">Remote</span>
+        </div>
+      </div>
+
+      <!-- Local Video (picture-in-picture) -->
+      <div class="pip">
+        <div class="video-card video-local">
+          <video id="local-video" autoplay muted playsinline></video>
+          <div class="video-label">
+            <span class="pill">You</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Controls -->
+    <footer class="controls">
+      <div class="controls-left">
+        <div class="room-chip" title="Room info appears after you connect (optional to wire in JS)">
+          <span class="room-chip-label">Room</span>
+          <span class="room-chip-value" id="room-chip-value">—</span>
+        </div>
+      </div>
+
+      <div class="controls-center">
+        <button class="btn btn-ghost" onclick="startScreenShare()">
+          <span class="icon">🖥️</span>
+          Screen Share
+        </button>
+      </div>
+
+      <div class="controls-right">
+        <div class="small-muted">WaveChat</div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- PeerJS + your script -->
+  <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+  <script src="script.js"></script>
 </body>
-
-<script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
-<script src="script.js"></script>
-
 </html>
