@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WaveChat · Profile</title>
+
+  <link rel="stylesheet" href="../../styles/ProfileViewStyle.css" />
+</head>
+
+<body>
+  <div class="profile-container">
+
+    <h1 class="app-title">Profile</h1>
+
+    <!-- PROFILE CARD -->
+    <div class="profile-card">
+
+      <div class="profile-header">
+        <div class="avatar"></div>
+        <span class="profile-label">Active Profile</span>
+      </div>
+
+      <div class="profile-fields">
+
+        <!-- EDIT TOGGLE -->
+        <div class="settings-toggle">
+          <span>Edit Profile</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="editToggle" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <label>
+          Screen Name
+          <input type="text" id="screenName" disabled />
+        </label>
+
+        <label>
+          Spoken Language
+          <select id="spokenLanguage" disabled>
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="pt">Portuguese</option>
+          </select>
+        </label>
+
+        <label>
+          Sign Language
+          <select id="signLanguage" disabled>
+            <option value="asl">ASL</option>
+            <option value="bsl">BSL</option>
+            <option value="isl">International Sign</option>
+          </select>
+        </label>
+
+        <button class="primary-btn" id="saveProfile" disabled>
+          Save Changes
+        </button>
+
+        <p class="guest-note hidden" id="guestNote">
+          Guest profiles have limited editing.<br />
+          Create a local profile to unlock all features.
+        </p>
+
+        <button class="danger-btn" id="profileActionBtn"></button>
+
+      </div>
+    </div>
+
+    <!-- CALL ACTIONS -->
+    <div class="call-actions">
+      <button class="primary-btn" id="startCall">Start Call</button>
+      <button class="secondary-btn" id="joinCall">Join Call</button>
+    </div>
+
+    <!-- RECENT CALLS -->
+    <div class="calls-card">
+      <h2>Recent Calls</h2>
+      <ul id="recentCalls"></ul>
+    </div>
+
+  </div>
+
+  <script src="../../scripts/ProfileViewScript.js"></script>
+</body>
+</html>

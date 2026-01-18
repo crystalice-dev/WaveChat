@@ -1,0 +1,141 @@
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #0b0b0f;
+  color: white;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== LOGO ===== */
+.logo {
+  font-size: 2.4rem;
+  margin-bottom: 26px;
+  letter-spacing: 1px;
+}
+
+/* ===== CARD ===== */
+.card {
+  position: relative;
+  background: #14141d;
+  padding: 32px 24px 24px;
+  border-radius: 14px;
+  width: 320px;
+  text-align: center;
+
+  pointer-events: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ===== HEADERS ===== */
+.card h2 {
+  margin-top: 8px;
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+
+/* ===== INPUTS ===== */
+.card input,
+.card select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+
+  border-radius: 8px;
+  border: none;
+
+  font-size: 14px;
+
+  background: #ffffff;     /* ✅ WHITE BACKGROUND */
+  color: #0b0b0f;          /* dark text for contrast */
+
+  pointer-events: auto;
+}
+
+.card input:focus,
+.card select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79,124,255,0.6);
+}
+
+/* ===== BUTTONS ===== */
+.primary-btn {
+  width: 100%;
+  padding: 13px;
+
+  background: #4f7cff;
+  border: none;
+  border-radius: 10px;
+
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+
+  pointer-events: auto;
+}
+
+.primary-btn:hover {
+  background: #6a92ff;
+}
+
+/* ===== BACK BUTTON ===== */
+.back-btn {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+
+  width: 36px;
+  height: 36px;
+
+  border-radius: 50%;
+  background: transparent;
+
+  border: 2px solid #4f7cff;
+  color: white;
+
+  font-size: 20px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 2;
+}
+
+.back-btn:hover {
+  background: rgba(79,124,255,0.15);
+}
+
+/* ===== SPINNER ===== */
+.spinner {
+  margin: 10px auto 14px;
+  width: 40px;
+  height: 40px;
+
+  border: 4px solid rgba(255,255,255,0.15);
+  border-top: 4px solid #4f7cff;
+  border-radius: 50%;
+
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

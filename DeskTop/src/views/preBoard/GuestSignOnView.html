@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WaveChat · Guest Setup</title>
+
+  <link rel="stylesheet" href="../../styles/GuestSignOnViewStyle.css" />
+</head>
+
+<body>
+  <div class="container" id="guest-root">
+
+    <!-- LOGO -->
+    <h1 class="logo">WaveChat</h1>
+
+    <!-- STEP 1: SCREEN NAME -->
+    <div class="card" id="name-card">
+
+      <!-- BACK BUTTON (inside card, not floating) -->
+      <button class="back-btn" id="back-btn">←</button>
+
+      <h2>What should we call you?</h2>
+
+      <input
+        type="text"
+        id="screenName"
+        placeholder="Screen name"
+        autocomplete="off"
+      />
+
+      <button class="primary-btn" id="name-continue">
+        Continue
+      </button>
+    </div>
+
+    <!-- STEP 2: DATE OF BIRTH -->
+    <div class="card hidden" id="dob-card">
+      <h2>Date of Birth</h2>
+      <input type="date" id="dob" />
+      <button class="primary-btn" id="dob-continue">Continue</button>
+    </div>
+
+    <!-- STEP 3: SPOKEN LANGUAGE -->
+    <div class="card hidden" id="spoken-card">
+      <h2>Spoken Language</h2>
+      <select id="spokenLanguage">
+        <option value="">Select</option>
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="pt">Portuguese</option>
+      </select>
+      <button class="primary-btn" id="spoken-continue">Continue</button>
+    </div>
+
+    <!-- STEP 4: SIGN LANGUAGE -->
+    <div class="card hidden" id="sign-card">
+      <h2>Sign Language</h2>
+      <select id="signLanguage">
+        <option value="">Select</option>
+        <option value="asl">American Sign Language (ASL)</option>
+        <option value="bsl">British Sign Language (BSL)</option>
+        <option value="isl">International Sign</option>
+      </select>
+      <button class="primary-btn" id="sign-continue">Finish</button>
+    </div>
+
+    <!-- SAVING -->
+    <div class="card hidden" id="saving-card">
+      <div class="spinner"></div>
+      <p>Setting things up…</p>
+    </div>
+
+  </div>
+
+  <script src="../../scripts/GuestSignOnViewScript.js"></script>
+</body>
+</html>

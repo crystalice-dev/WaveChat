@@ -1,0 +1,102 @@
+:root {
+  --brand-color: #4f7cff;
+  --brand-color-hover: #6a92ff;
+  --bg-main: #0b0b0f;
+  --text-main: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.6);
+}
+
+/* ===== BASE ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-main);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+  color: var(--text-main);
+}
+
+/* ===== BOOT ===== */
+#boot {
+  height: 100vh;
+  width: 100vw;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+
+  background-color: var(--bg-main);
+
+  transition:
+    background-color 1.6s ease,
+    opacity 0.8s ease;
+}
+
+/* ===== TITLE ===== */
+#boot h1 {
+  font-size: 24px;                /* start small */
+  color: var(--brand-color);
+  font-weight: 400;
+  letter-spacing: 1px;
+
+  transform: scale(0.55);
+
+  transition:
+    transform 1.6s ease,
+    font-size 1.6s ease,
+    color 1.6s ease;
+}
+
+/* ===== ACTIVE STATE ===== */
+#boot.animate {
+  background-color: var(--bg-main);
+}
+
+#boot.animate h1 {
+  font-size: 96px;
+  transform: scale(1);
+  color: var(--text-main);
+}
+
+/* ===== SPINNER ===== */
+.spinner {
+  margin-top: 24px;
+
+  width: 36px;
+  height: 36px;
+
+  border: 4px solid rgba(255, 255, 255, 0.15);
+  border-top: 4px solid var(--brand-color);
+  border-radius: 50%;
+
+  animation: spin 1.2s linear infinite;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  position: absolute;
+  bottom: 32px;
+
+  font-size: 12px;
+  letter-spacing: 1px;
+  opacity: 0.6;
+
+  color: var(--text-muted);
+}
+
+/* ===== FADE OUT ===== */
+#boot.fade-out {
+  opacity: 0;
+}
+
+/* ===== SPIN ===== */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

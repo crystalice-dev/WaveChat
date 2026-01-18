@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WaveChat · Welcome</title>
+
+  <link rel="stylesheet" href="../../styles/SignOnViewStyle.css" />
+</head>
+
+<body>
+  <div class="signon">
+
+    <!-- TITLE -->
+    <h1>WaveChat</h1>
+
+    <!-- PROFILES (only shown if any exist) -->
+    <div class="profiles hidden" id="profilesContainer">
+      <p class="section-label">Select a profile</p>
+      <div id="profilesList"></div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+      <button class="primary" id="signin">
+        Sign In
+      </button>
+
+      <button class="secondary" id="guest">
+        Continue as Guest
+      </button>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      a Crystal Ice product
+    </div>
+  </div>
+
+  <script src="../../scripts/SignOnViewScript.js"></script>
+</body>
+</html>

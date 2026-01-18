@@ -1,0 +1,241 @@
+/* ===== BASE ===== */
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #0b0b0f;
+  color: white;
+}
+
+/* ===== CONTAINER ===== */
+.profile-container {
+  min-height: 100vh;
+  padding: 48px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== TITLE ===== */
+.app-title {
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+  opacity: 0.95;
+}
+
+/* ===== PROFILE CARD ===== */
+.profile-card {
+  background: #14141d;
+  border-radius: 16px;
+  padding: 24px;
+  width: 380px;
+  margin-bottom: 20px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.profile-label {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+/* ===== AVATAR ===== */
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f7cff, #6a92ff);
+  box-shadow: 0 0 0 3px rgba(79,124,255,0.15);
+}
+
+/* ===== FIELDS ===== */
+.profile-fields label {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.8;
+  margin-bottom: 14px;
+}
+
+.profile-fields input,
+.profile-fields select {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  background: #1b1b26;
+  color: white;
+}
+
+.profile-fields input:disabled,
+.profile-fields select:disabled {
+  opacity: 0.55;
+}
+
+/* ===== TOGGLE SWITCH ===== */
+.settings-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 42px;
+  height: 22px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-switch .slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #2a2a38;
+  border-radius: 999px;
+  transition: background-color 0.25s ease;
+}
+
+.toggle-switch .slider::before {
+  content: "";
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  top: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.25s ease;
+}
+
+.toggle-switch input:checked + .slider {
+  background-color: #4f7cff;
+}
+
+.toggle-switch input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+.toggle-switch input:disabled + .slider {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ===== BUTTONS ===== */
+.primary-btn,
+.secondary-btn {
+  width: 300px; /* ~21% smaller than card */
+  padding: 13px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 10px auto 0;
+  display: block;
+}
+
+.primary-btn {
+  background: #4f7cff;
+  border: none;
+  color: white;
+}
+
+.primary-btn:hover {
+  background: #6a92ff;
+}
+
+.primary-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.secondary-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+}
+
+.secondary-btn:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* ===== DANGER ===== */
+.danger-btn {
+  width: 220px;
+  padding: 12px;
+  margin: 14px auto 0;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 80, 80, 0.4);
+  background: transparent;
+  color: #ff6b6b;
+  cursor: pointer;
+  display: block;
+}
+
+.danger-btn:hover {
+  background: rgba(255, 80, 80, 0.12);
+}
+
+/* ===== CALL ACTIONS ===== */
+.call-actions {
+  width: 380px;
+  margin: 6px 0 26px;
+}
+
+/* ===== GUEST NOTE ===== */
+.guest-note {
+  margin-top: 12px;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ===== RECENT CALLS ===== */
+.calls-card {
+  background: #14141d;
+  border-radius: 16px;
+  padding: 20px;
+  width: 380px;
+}
+
+.calls-card h2 {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+}
+
+.calls-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.calls-card li {
+  padding: 10px 0;
+  font-size: 0.85rem;
+  opacity: 0.85;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.calls-card li:last-child {
+  border-bottom: none;
+}
